@@ -1,23 +1,25 @@
 import asyncio
 import aiogram
-from bot import bot, dp
+from tg_bot.bot import bot, dp
 from infrastructure.redis_connection import RedisConnector
 from config.settings import bot_logger
-
+from tg_bot.middleware.new_user_middleware import NewUserMiddleware
+from tg_bot.handlers.commands import router
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
+    dp.update.outer_middleware(NewUserMiddleware())
+    dp.include_router(router)
 
-    redis_connector = RedisConnector(1, bot_logger)
-    redis_client = redis_connector.get_client()
+    redis_connector = RedisConnector(bot_logger)
+    redis_client = redis_connector.get_client(0)
     if not redis_client:
         bot_logger.error("Не удалось подключиться к Redis. Завершаем работу бота.")
         return
     
     try:
         bot_logger.info("Бот запущен. Нажмите Command+C для остановки.")
-        await asyncio.Event().wait()
+        await dp.start_polling(bot)
     except KeyboardInterrupt:
         bot_logger.info("Остановка бота по запросу пользователя...")
     finally:
