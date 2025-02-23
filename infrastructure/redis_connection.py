@@ -1,6 +1,6 @@
 import redis.asyncio as redis
 import asyncio
-from config.settings import RedisSettings
+from config.settings import redis_settings
 
 
 class RedisConnector:
@@ -9,7 +9,6 @@ class RedisConnector:
     This class provides methods to establish and manage a connection
     to a Redis server.
     """
-
     def __init__(self, logger):
         """
         Initialize the RedisConnector instance.
@@ -25,9 +24,9 @@ class RedisConnector:
             client: The Redis client instance (initially None).
         """
         self.logger = logger
-        self.host = RedisSettings.REDIS_HOST
-        self.port = RedisSettings.REDIS_PORT
-        self.timeout = RedisSettings.REDIS_TIMEOUT
+        self.host = redis_settings.REDIS_HOST
+        self.port = redis_settings.REDIS_PORT
+        self.timeout = redis_settings.REDIS_TIMEOUT
         self._lock = asyncio.Lock()
         self.client = None
 
@@ -44,7 +43,7 @@ class RedisConnector:
             db (int, optional): The Redis database index to connect to. Defaults to 0.
         """
         try:
-            self.db = db  # Save the database index for logging purposes
+            self.db = db
             client = redis.Redis(
                 host=self.host,
                 port=self.port,
@@ -59,7 +58,7 @@ class RedisConnector:
             self.logger.error(f"Redis connection error (DB={self.db}): {e}")
             self.client = None
 
-    async def get_client(self):
+    async def get_client(self, db: int):
         """
         Retrieve the active Redis client instance, establishing a connection if necessary.
 
@@ -73,7 +72,7 @@ class RedisConnector:
         if self.client is None:
             async with self._lock:
                 if self.client is None:
-                    await self.connect()
+                    await self.connect(db)
         return self.client
 
     async def close_conn(self):
