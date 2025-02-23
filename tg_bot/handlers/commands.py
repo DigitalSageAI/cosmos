@@ -13,7 +13,6 @@ router = Router()
 
 @router.message(Command('start'))
 async def send_welcome(message: types.Message, **kwargs):
-    print(f"Количество аргументов в kwargs: {len(kwargs)}")
     #user_status = kwargs[user_status]
     await message.reply(text="Привет, Администратор!")
     # user_status = user_data['user_status']
