@@ -13,20 +13,21 @@ class UsersService:
     async def add_new_user(
             tg_id: int,
             tg_name: Optional[str],
-            lang: str
+            lang: str,
+            utm: Optional[str] = None
             ) -> None:
         async with async_session_maker() as session:
             try:
                 new_user = Users(
                     tg_id=tg_id,
                     tg_name=tg_name,
-                    lang=lang
+                    lang=lang,
+                    utm=utm
                     )
                 session.add(new_user)
                 await session.commit()
             except IntegrityError:
                 await session.rollback()
-                print(f"Ошибка: Пользователь с tg_id={tg_id} уже существует")
 
 
     @staticmethod
