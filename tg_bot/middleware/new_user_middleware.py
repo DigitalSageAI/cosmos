@@ -3,7 +3,7 @@ from typing import Dict, Any, Callable, Awaitable
 
 from db.crud import UsersService
 from config.settings import env_vars
-
+from infrastructure.redis_client import redis_connector
 
 class NewUserMiddleware(BaseMiddleware):
     async def __call__(
@@ -40,13 +40,21 @@ class NewUserMiddleware(BaseMiddleware):
         return not await UsersService.check_exist_user(tg_id)
 
     async def _add_new_user(self, tg_id: int, data: Dict[str, Any], utm: str) -> None:
-        """Adds a new user to the database"""
+        """Adds a new user to the database and Redis"""
         await UsersService.add_new_user(
             tg_id,
             data['event_from_user'].username,
             data['event_from_user'].language_code,
             utm
         )
+        redis_key = f"user_id:{tg_id}"
+        data_for_redis = {"language": data['event_from_user'].language_code}
+        redis_client = await redis_connector.get_client(db=0)
+        if redis_client is not None:
+            async with redis_client.pipeline() as pipe:
+                await pipe.hset(redis_key, mapping=data_for_redis)
+                await pipe.expire(redis_key, 3600)  # setting TTL - 1 hour (3600 secs)
+                await pipe.execute() 
 
     async def _set_user_status(self, tg_id: int, data: Dict[str, Any]) -> None:
         """Sets the user status"""
@@ -55,3 +63,4 @@ class NewUserMiddleware(BaseMiddleware):
     def _get_user_status(self, tg_id: int) -> str:
         """Determines the user status"""
         return 'admin' if tg_id == env_vars['ADMIN_ID'] else 'base_user'
+
