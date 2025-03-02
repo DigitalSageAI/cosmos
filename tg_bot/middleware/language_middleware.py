@@ -8,8 +8,8 @@ class LanguageMiddleware(BaseMiddleware):
         self.redis_connector = redis_connector
         super().__ini__()
 
-    async def get_language_from_db(self):
+    #async def get_language_from_db(self):
 
 
-    async def get_langiage_from_redis(self):
+    #async def get_langiage_from_redis(self):
         

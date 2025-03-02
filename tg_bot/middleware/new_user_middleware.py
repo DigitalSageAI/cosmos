@@ -1,11 +1,14 @@
 from aiogram import BaseMiddleware
 from typing import Dict, Any, Callable, Awaitable
 
-from db.crud import UsersService
+#from db.crud import UsersService
 from config.settings import env_vars
-from infrastructure.redis_client import redis_connector
 
 class NewUserMiddleware(BaseMiddleware):
+    def __init__(self, redis_connector, user_service):
+        self.redis_connector = redis_connector
+        self.user_service = user_service
+
     async def __call__(
         self,
         handler: Callable[..., Awaitable[Any]],
@@ -37,11 +40,11 @@ class NewUserMiddleware(BaseMiddleware):
 
     async def _is_new_user(self, tg_id: int) -> bool:
         """Checks if the user is new"""
-        return not await UsersService.check_exist_user(tg_id)
+        return not await self.user_service.check_exist_user(tg_id)
 
     async def _add_new_user(self, tg_id: int, data: Dict[str, Any], utm: str) -> None:
         """Adds a new user to the database and Redis"""
-        await UsersService.add_new_user(
+        await self.user_service.add_new_user(
             tg_id,
             data['event_from_user'].username,
             data['event_from_user'].language_code,
@@ -49,7 +52,7 @@ class NewUserMiddleware(BaseMiddleware):
         )
         redis_key = f"user_id:{tg_id}"
         data_for_redis = {"language": data['event_from_user'].language_code}
-        redis_client = await redis_connector.get_client(db=0)
+        redis_client = await self.redis_connector.get_client(db=0)
         if redis_client is not None:
             async with redis_client.pipeline() as pipe:
                 await pipe.hset(redis_key, mapping=data_for_redis)

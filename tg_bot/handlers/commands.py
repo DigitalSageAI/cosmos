@@ -18,3 +18,14 @@ async def send_welcome(message: types.Message, **kwargs):
     # user_status = user_data['user_status']
     # if user_status == 'admin':
     #     await message.reply(text="Привет, Администратор!")
+
+
+
+@router.message(Command('menu'))
+async def main_menu(message: types.Message, **kwargs):
+    await message.reply(text="Menu")
+
+
+@router.message(Command('ask_ai'))
+async def main_menu(message: types.Message, **kwargs):
+    await message.reply(text=)

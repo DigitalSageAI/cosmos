@@ -1,15 +1,16 @@
 import asyncio
-import aiogram
-from tg_bot.bot import bot, dp
-from infrastructure.redis_client import redis_connector
-from config.settings import bot_logger
+
+from tg_bot.bot import *
 from tg_bot.middleware.new_user_middleware import NewUserMiddleware
 from tg_bot.handlers.commands import router
+
+from config.settings import bot_logger
+
 
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
-    dp.update.outer_middleware(NewUserMiddleware())
+    dp.update.outer_middleware(NewUserMiddleware(redis_connector,user_service))
     dp.include_router(router)
 
     redis_client = redis_connector.get_client(db=0)
