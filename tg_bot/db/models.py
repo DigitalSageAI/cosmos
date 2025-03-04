@@ -3,7 +3,7 @@ from typing import Optional, Annotated
 from sqlalchemy import Column, Integer, BigInteger, String, Boolean, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
-from db.session import Base
+from tg_bot.db.session import Base
 
 
 

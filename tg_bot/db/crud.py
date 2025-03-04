@@ -1,8 +1,8 @@
 from typing import Optional
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
-from db.models import Users
-from db.session import async_session_maker
+from tg_bot.db.models import Users
+from tg_bot.db.session import async_session_maker
 
 class UsersService:
     def __init__(self, async_session_maker):

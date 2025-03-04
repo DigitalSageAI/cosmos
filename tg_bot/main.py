@@ -4,7 +4,7 @@ from tg_bot.bot import *
 from tg_bot.middleware.new_user_middleware import NewUserMiddleware
 from tg_bot.handlers.commands import router
 
-from config.settings import bot_logger
+from tg_bot.config.settings import bot_logger
 
 
 

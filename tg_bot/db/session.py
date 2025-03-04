@@ -1,6 +1,6 @@
 import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from config.settings import DatabaseSettings
+from tg_bot.config.settings import DatabaseSettings
 from sqlalchemy.orm import DeclarativeBase
 
 # Предположим, что вы хотите получить URL для определённого ключа

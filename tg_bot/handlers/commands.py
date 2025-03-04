@@ -28,4 +28,4 @@ async def main_menu(message: types.Message, **kwargs):
 
 @router.message(Command('ask_ai'))
 async def main_menu(message: types.Message, **kwargs):
-    await message.reply(text=)
+    await message.reply(text="AI")

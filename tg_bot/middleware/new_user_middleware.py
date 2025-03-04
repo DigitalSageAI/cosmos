@@ -1,8 +1,7 @@
 from aiogram import BaseMiddleware
 from typing import Dict, Any, Callable, Awaitable
 
-#from db.crud import UsersService
-from config.settings import env_vars
+from tg_bot.config.settings import env_vars
 
 class NewUserMiddleware(BaseMiddleware):
     def __init__(self, redis_connector, user_service):

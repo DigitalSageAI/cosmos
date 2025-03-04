@@ -2,7 +2,7 @@ from typing import Optional
 
 import redis.asyncio as redis
 import asyncio
-from config.settings import redis_settings
+from tg_bot.config.settings import redis_settings
 
 class RedisConnector:
     """Asynchronous connector for a Redis server.
