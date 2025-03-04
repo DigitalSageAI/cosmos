@@ -23,3 +23,11 @@ class UsersService:
         async with self.session_maker() as session:
             result = await session.execute(select(Users).where(Users.tg_id == tg_id))
             return result.scalar_one_or_none() is not None
+
+    async def get_user_language(self, tg_id: int) -> str:
+        async with self.session_maker() as session:
+            result = await session.execute(select(Users.lang).where(Users.tg_id == tg_id))
+            user_lang = result.scalar_one_or_none()
+            if user_lang is None:
+                raise ValueError(f"User with tg_id {tg_id} not found")
+            return user_lang

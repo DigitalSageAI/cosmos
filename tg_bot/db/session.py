@@ -4,7 +4,7 @@ from tg_bot.config.settings import DatabaseSettings
 from sqlalchemy.orm import DeclarativeBase
 
 # Предположим, что вы хотите получить URL для определённого ключа
-database_url = DatabaseSettings.get_('tg_db')
+database_url = DatabaseSettings.get_db_url('tg_db')
 
 
 engine = create_async_engine(

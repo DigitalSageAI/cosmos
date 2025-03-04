@@ -5,6 +5,7 @@ from tg_bot.config.settings import env_vars
 
 class NewUserMiddleware(BaseMiddleware):
     def __init__(self, redis_connector, user_service):
+        super().__init__()
         self.redis_connector = redis_connector
         self.user_service = user_service
 
@@ -50,11 +51,11 @@ class NewUserMiddleware(BaseMiddleware):
             utm
         )
         redis_key = f"user_id:{tg_id}"
-        data_for_redis = {"language": data['event_from_user'].language_code}
+        data = {"language": data['event_from_user'].language_code}
         redis_client = await self.redis_connector.get_client(db=0)
         if redis_client is not None:
             async with redis_client.pipeline() as pipe:
-                await pipe.hset(redis_key, mapping=data_for_redis)
+                await pipe.hset(redis_key, mapping=data)
                 await pipe.expire(redis_key, 3600)  # setting TTL - 1 hour (3600 secs)
                 await pipe.execute() 
 

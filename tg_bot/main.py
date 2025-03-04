@@ -2,6 +2,7 @@ import asyncio
 
 from tg_bot.bot import *
 from tg_bot.middleware.new_user_middleware import NewUserMiddleware
+from tg_bot.middleware.language_middleware import LanguageMiddleware
 from tg_bot.handlers.commands import router
 
 from tg_bot.config.settings import bot_logger
@@ -11,6 +12,7 @@ from tg_bot.config.settings import bot_logger
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     dp.update.outer_middleware(NewUserMiddleware(redis_connector,user_service))
+    dp.update.outer_middleware(LanguageMiddleware(redis_connector,user_service))
     dp.include_router(router)
 
     redis_client = redis_connector.get_client(db=0)

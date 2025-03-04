@@ -1,27 +1,27 @@
 {
     "start": {
         "ru":"Привет, добро пожаловать в НейроКосмический бот",
-        "en":"",
-        "es":""
+        "en":"Hello, welcome to the NeuroSpace bot",
+        "es":"Hola, bienvenido al bot NeuroEspacial"
     },
     "start_admin": {
         "ru":"Привет, администратор",
-        "en":"",
-        "es":""
+        "en":"Hello, administrator",
+        "es":"Hola, administrador"
     },
     "ask_ai_email":{
         "ru":"Привет, меня зовут НейроКос и я могу ответить на все твои вопросы.\nДля начала давай пройдем регистрацию чтобы и я познакомился с тобой\nВведи Email",
-        "en":"",
-        "es":""
+        "en":"Hello, my name is NeuroKos and I can answer all your questions.\nFirst, let's go through the registration so I can get to know you\nEnter your Email",
+        "es":"Hola, me llamo NeuroKos y puedo responder a todas tus preguntas.\nPrimero, vamos a registrarnos para que pueda conocerte\nIntroduce tu correo electrónico"
     },
     "set_password":{
         "ru":"Теперь придумай пароль",
-        "en":"",
-        "es":""
+        "en":"Now create a password",
+        "es":"Ahora crea una contraseña"
     },
     "change_language":{
         "ru":"Сменить язык",
-        "en":"",
-        "es":""
-    },
+        "en":"Change language",
+        "es":"Cambiar idioma"
+    }
 }
